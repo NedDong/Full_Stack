@@ -54,21 +54,51 @@ from customers c left join orders o on c.customerid = o.customerid
 where c.city != o.shipcity
 
 --8)
+--List 5 most popular products, their average price, and the customer city that ordered most quantity of it.
 
-with mostAmount as
+-- SELECT ProductID, avg_p as [average price], City as [Most ordered City]
+-- FROM (
+SELECT t2.ProductID, ROUND(tt / qt,2) as average_price, City 
+FROM (
+SELECT  DISTINCT ProductID, SUM(UnitPrice * (1 - Discount) * Quantity) OVER (Partition BY ProductID) tt
+FROM [Order Details]
+WHERE ProductID in (
+
+SELECT ProductID 
+FROM (
+SELECT  Top 5 ProductID , SUM(Quantity) as total
+FROM [Order Details]
+GROUP BY ProductID
+ORDER BY total DESC ) t1 
+))t2 
+LEFT JOIN 
 (
-select top 1 c.city as ECity, SUM(od.quantity) as test1
-from Customers c join Orders o on c.customerID = o.CustomerID join [Order Details] od on o.orderID = od.orderID
-Group by c.city
-order by SUM(od.quantity) desc
-), soldmost as (
-select top 1 e.city as CCity
-from Orders o left join Employees e on o.EmployeeID = e.EmployeeID
-group by e.city
-order by count(*) DESC
-)
-select m.ECity
-from mostAmount m join soldmost s on m.ECity = s.CCity
+    SELECT ProductID, SUM(Quantity) as qt 
+    FROM [Order Details]
+    GROUP BY ProductID
+) t3 
+ON t2.ProductId = t3.ProductId
+LEFT JOIN 
+(   
+    SELECT ProductId,City, rk
+    FROM(
+    SELECT ProductId,City,RANK() OVER (PArTITION BY ProductId ORDER BY q2 DESC) rk, q2
+    FROM (
+    SELECT t4.ProductId,t6.City, SUM(t4.Quantity) as q2
+    FROM [Order Details] t4
+    LEFT JOIN Orders t5
+    ON t4.OrderId = t5.OrderId
+    LEFT JOIN Customers t6
+    ON t5.CustomerID = t6.CustomerID
+    GROUP BY t4.ProductId, t6.City) t7 ) t8  
+    WHERE rk = 1
+) t9 
+ON t2.ProductId = t9.ProductId
+ORDER BY qt DESC
+
+
+
+
 
 
 --9)
