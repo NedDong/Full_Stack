@@ -1,0 +1,85 @@
+body {
+    
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #2e3c80;
+    padding: 10px 20px;
+    color: white;
+}
+
+.logo img {
+    height: 40px;
+}
+
+nav .menu {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding-left: 50px;
+
+}
+
+.menu > li {
+    position: relative;
+    margin: 0 10px;
+padding: 5px 10px;
+}
+
+.menu > li > a {
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    display: block;
+}
+
+.menu li:hover .dropdown {
+    display: block;
+}
+
+.dropdown {
+    display: none;
+    position: absolute;
+    background-color: #2e3c80;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    top: 40px;
+}
+
+.dropdown li a {
+    padding: 10px 20px;
+    display: block;
+    color: white;
+    text-decoration: none;
+}
+
+.dropdown li a:hover {
+    background-color: #5a6b83;
+}
+
+.user-section {
+    display: flex;
+    align-items: center;
+}
+
+.user-section a {
+    color: white;
+    margin-right: 20px;
+    text-decoration: none;
+}
+
+.search {
+    display: flex;
+}
+
+.search input {
+    padding: 5px;
+}
+
+.search button {
+    padding: 5px 10px;
+}
